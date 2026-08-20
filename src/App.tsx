@@ -70,16 +70,21 @@ function App() {
 
       <p>Current query: {query}</p>
       <p>Submitted query: {submittedQuery}</p>
-      <ul>
-        {filteredRepositories.map((repository) => (
-          <li key={repository.id}>
-            <p>{repository.name}</p>
-            <p>{repository.description}</p>
-            <p>Language: {repository.language}</p>
-            <p>Stars: {repository.stars}</p>
-          </li>
-        ))}
-      </ul>
+
+      {filteredRepositories.length === 0 ? (
+        <p>No repositories found.</p>
+      ) : (
+        <ul>
+          {filteredRepositories.map((repository) => (
+            <li key={repository.id}>
+              <p>{repository.name}</p>
+              <p>{repository.description}</p>
+              <p>Language: {repository.language}</p>
+              <p>Stars: {repository.stars}</p>
+            </li>
+          ))}
+        </ul>
+      )}
     </main>
   );
 }
