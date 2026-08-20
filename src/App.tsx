@@ -35,6 +35,9 @@ const mockRepositories: Repository[] = [
 function App() {
   const [query, setQuery] = useState("");
   const [submittedQuery, setSubmittedQuery] = useState("");
+  const filteredRepositories = mockRepositories.filter((repository) =>
+    repository.name.toLowerCase().includes(submittedQuery.toLowerCase()),
+  );
 
   return (
     <main>
@@ -68,7 +71,7 @@ function App() {
       <p>Current query: {query}</p>
       <p>Submitted query: {submittedQuery}</p>
       <ul>
-        {mockRepositories.map((repository) => (
+        {filteredRepositories.map((repository) => (
           <li key={repository.id}>
             <p>{repository.name}</p>
             <p>{repository.description}</p>
