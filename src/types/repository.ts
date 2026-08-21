@@ -1,0 +1,7 @@
+export type Repository = {
+  id: number;
+  name: string;
+  description: string;
+  language: string;
+  stars: number;
+};

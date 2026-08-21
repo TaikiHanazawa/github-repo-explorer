@@ -1,16 +1,6 @@
 import { useState } from "react";
-
-type Repository = {
-  id: number;
-  name: string;
-  description: string;
-  language: string;
-  stars: number;
-};
-
-type RepositoryItemProps = {
-  repository: Repository;
-};
+import type { Repository } from "./types/repository";
+import { RepositoryItem } from "./components/RepositoryItem";
 
 const mockRepositories: Repository[] = [
   {
@@ -35,17 +25,6 @@ const mockRepositories: Repository[] = [
     stars: 50000,
   },
 ];
-
-function RepositoryItem({ repository }: RepositoryItemProps) {
-  return (
-    <li>
-      <p>{repository.name}</p>
-      <p>{repository.description}</p>
-      <p>Language: {repository.language}</p>
-      <p>Stars: {repository.stars}</p>
-    </li>
-  );
-}
 
 function App() {
   const [query, setQuery] = useState("");
