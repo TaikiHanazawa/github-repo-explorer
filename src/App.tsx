@@ -1,37 +1,11 @@
 import { useState } from "react";
-import type { Repository } from "./types/repository";
+import type { GitHubSearchResponse, Repository } from "./types/repository";
 import { RepositoryItem } from "./components/RepositoryItem";
-
-const mockRepositories: Repository[] = [
-  {
-    id: 1,
-    name: "react",
-    description: "A JavaScript library for building user interfaces",
-    language: "JavaScript",
-    stars: 180000,
-  },
-  {
-    id: 2,
-    name: "go",
-    description: "The Go programming language",
-    language: "Go",
-    stars: 80000,
-  },
-  {
-    id: 3,
-    name: "serverless",
-    description: "The serverless framework",
-    language: "JavaScript",
-    stars: 50000,
-  },
-];
 
 function App() {
   const [query, setQuery] = useState("");
   const [submittedQuery, setSubmittedQuery] = useState("");
-  const filteredRepositories = mockRepositories.filter((repository) =>
-    repository.name.toLowerCase().includes(submittedQuery.toLowerCase()),
-  );
+  const [repositories, setRepositories] = useState<Repository[]>([]);
 
   return (
     <main>
@@ -39,7 +13,7 @@ function App() {
       <p>Explore GitHub Repositories</p>
 
       <form
-        onSubmit={(event) => {
+        onSubmit={async (event) => {
           event.preventDefault();
 
           const trimmedQuery = query.trim();
@@ -49,6 +23,16 @@ function App() {
           }
 
           setSubmittedQuery(trimmedQuery);
+
+          const encodedQuery = encodeURIComponent(trimmedQuery);
+
+          const response = await fetch(
+            `https://api.github.com/search/repositories?q=${encodedQuery}&per_page=10`,
+          );
+
+          const data: GitHubSearchResponse = await response.json();
+
+          setRepositories(data.items);
         }}
       >
         <label htmlFor="query">Search repositories</label>
@@ -65,15 +49,16 @@ function App() {
       <p>Current query: {query}</p>
       <p>Submitted query: {submittedQuery}</p>
 
-      {filteredRepositories.length === 0 ? (
-        <p>No repositories found.</p>
-      ) : (
-        <ul>
-          {filteredRepositories.map((repository) => (
-            <RepositoryItem key={repository.id} repository={repository} />
-          ))}
-        </ul>
-      )}
+      {submittedQuery !== "" &&
+        (repositories.length === 0 ? (
+          <p>No repositories found.</p>
+        ) : (
+          <ul>
+            {repositories.map((repository) => (
+              <RepositoryItem key={repository.id} repository={repository} />
+            ))}
+          </ul>
+        ))}
     </main>
   );
 }
