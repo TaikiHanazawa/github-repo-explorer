@@ -7,10 +7,14 @@ type RepositoryItemProps = {
 export function RepositoryItem({ repository }: RepositoryItemProps) {
   return (
     <li>
-      <p>{repository.name}</p>
-      <p>{repository.description}</p>
-      <p>Language: {repository.language}</p>
-      <p>Stars: {repository.stars}</p>
+      <p>
+        <a href={repository.html_url} target="_blank" rel="noopener noreferrer">
+          {repository.name}
+        </a>
+      </p>
+      <p>{repository.description ?? "No description"}</p>
+      <p>Language: {repository.language ?? "Not specified"}</p>
+      <p>Stars: {repository.stargazers_count}</p>
     </li>
   );
 }
